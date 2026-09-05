@@ -1,0 +1,8 @@
+# Pyrefly configuration
+search_path = [
+    "."
+]
+project_excludes = [
+    "**/__pyrefly_virtual__/**",
+    "**/inmemory/**"
+]

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SecureAI - Cybersecurity Operations Center (SOC) Dashboard</title>
+  
+  <!-- Modern Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Chart.js for Cyber Visualizations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+
+  <!-- Custom Cyber SOC Stylesheet -->
+  <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-brand">
+      <div class="brand-icon">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+        </svg>
+      </div>
+      <span>Secure<span style="color:var(--accent-cyan);">AI</span></span>
+    </a>
+
+    <!-- Desktop Nav Links -->
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="simulator.html">Attack Simulator</a></li>
+      <li><a href="dashboard.html" class="active">SOC Dashboard</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <div class="status-badge" title="AI Risk Engine Operational">
+        <div class="status-dot"></div>
+        <span class="status-text">ML ACTIVE</span>
+      </div>
+
+      <div class="desktop-auth-actions">
+        <div style="display:flex; align-items:center; gap:0.6rem;">
+          <span style="font-size:0.85rem; color:var(--text-secondary);">
+            <span class="header-user-name">Security Officer</span>
+            <span class="badge badge-gray header-user-role" style="margin-left:0.2rem;">Admin</span>
+          </span>
+          <a href="login.html" class="btn btn-outline btn-sm">Switch Account</a>
+        </div>
+      </div>
+
+      <!-- Mobile Hamburger Toggle -->
+      <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Drawer Menu -->
+  <div class="mobile-menu-drawer" id="mobileMenuDrawer">
+    <ul class="mobile-nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="simulator.html">Attack Simulator</a></li>
+      <li><a href="dashboard.html">SOC Dashboard</a></li>
+    </ul>
+    <div class="mobile-menu-actions">
+      <div style="margin-bottom:0.8rem; color:var(--text-secondary); font-size:0.9rem;">
+        Signed in as <strong class="header-user-name">Security Officer</strong>
+      </div>
+      <a href="login.html" class="btn btn-outline btn-block" style="margin-bottom:0.6rem;">Sign In / Switch</a>
+      <a href="register.html" class="btn btn-primary btn-block">Enroll New ID</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div>
+
+      <!-- Dashboard Header & Role Switcher -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:1rem;">
+        <div>
+          <h1 style="font-size: 1.85rem; font-weight:800; color:#fff; display:flex; align-items:center; gap:0.6rem;">
+            <span>Security Operations Center (SOC)</span>
+            <span class="badge badge-safe">LIVE TELEMETRY</span>
+          </h1>
+          <p style="font-size:0.9rem; color:var(--text-secondary); margin-top:0.2rem;">
+            Real-time machine learning threat monitoring, behavioral velocity heuristics, and identity security audit log.
+          </p>
+        </div>
+
+        <!-- Quick Controls -->
+        <div style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;">
+          <div style="display:flex; align-items:center; gap:0.4rem; background:rgba(255,255,255,0.03); padding:0.4rem 0.8rem; border-radius:var(--radius-sm); border:1px solid var(--border-color);">
+            <span style="font-size:0.78rem; color:var(--text-muted);">Persona:</span>
+            <button class="btn btn-outline btn-sm" style="font-size:0.75rem; padding:0.2rem 0.5rem;" onclick="switchPersona('Admin', 'admin@secureai.com', 'Admin')">Admin</button>
+            <button class="btn btn-outline btn-sm" style="font-size:0.75rem; padding:0.2rem 0.5rem;" onclick="switchPersona('SOC Analyst', 'analyst@secureai.com', 'Analyst')">Analyst</button>
+            <button class="btn btn-outline btn-sm" style="font-size:0.75rem; padding:0.2rem 0.5rem;" onclick="switchPersona('Alex Mercer', 'alex@secureai.com', 'User')">User</button>
+          </div>
+          <button class="btn btn-outline btn-sm" style="font-size:0.75rem;" onclick="resetSocData()">Reset Telemetry</button>
+        </div>
+      </div>
+
+      <!-- KPI Metric Cards -->
+      <div class="kpi-grid">
+        <div class="kpi-card kpi-cyan">
+          <div class="kpi-icon">
+            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+          </div>
+          <div class="kpi-data">
+            <span class="kpi-val" id="kpiTotal">0</span>
+            <span class="kpi-label">Total Login Audits</span>
+          </div>
+        </div>
+
+        <div class="kpi-card kpi-emerald">
+          <div class="kpi-icon">
+            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          </div>
+          <div class="kpi-data">
+            <span class="kpi-val" id="kpiSafe">0</span>
+            <span class="kpi-label">Safe / Verified Logins</span>
+          </div>
+        </div>
+
+        <div class="kpi-card kpi-amber">
+          <div class="kpi-icon">
+            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+          </div>
+          <div class="kpi-data">
+            <span class="kpi-val" id="kpiSuspicious">0</span>
+            <span class="kpi-label">Suspicious Anomalies</span>
+          </div>
+        </div>
+
+        <div class="kpi-card kpi-crimson">
+          <div class="kpi-icon">
+            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+          </div>
+          <div class="kpi-data">
+            <span class="kpi-val" id="kpiHighRisk">0</span>
+            <span class="kpi-label">Blocked High Risk Attacks</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Row -->
+      <div style="display:grid; grid-template-columns: 2fr 1fr; gap:1.5rem; margin-bottom:2rem;">
+        <!-- Threat Distribution Chart -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <svg width="20" height="20" fill="none" stroke="var(--accent-cyan)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
+              <span>Real-time Risk Classification Distribution</span>
+            </div>
+            <span class="badge badge-gray">CURRENT TELEMETRY</span>
+          </div>
+          <div style="height:260px; position:relative;">
+            <canvas id="riskDistributionChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Threat Breakdown Doughnut -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <svg width="20" height="20" fill="none" stroke="var(--accent-emerald)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg>
+              <span>Posture Ratio</span>
+            </div>
+          </div>
+          <div style="height:260px; position:relative; display:flex; align-items:center; justify-content:center;">
+            <canvas id="postureChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Security Incidents Table -->
+      <div class="card" style="margin-bottom:2rem;">
+        <div class="card-header">
+          <div class="card-title">
+            <svg width="20" height="20" fill="none" stroke="var(--accent-crimson)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            <span>Active Incident Stream &amp; Automated Mitigations</span>
+          </div>
+          <a href="simulator.html" class="btn btn-outline btn-sm">Simulate New Incident</a>
+        </div>
+
+        <div class="table-responsive">
+          <table class="cyber-table">
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>Severity</th>
+                <th>Event Type</th>
+                <th>Target Identity</th>
+                <th>Threat Description</th>
+              </tr>
+            </thead>
+            <tbody id="incidentsTableBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Recent Login Interceptions & Telemetry Audit Log -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <svg width="20" height="20" fill="none" stroke="var(--accent-cyan)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+            <span>Authentication Telemetry &amp; AI Risk Audit</span>
+          </div>
+          <span class="badge badge-gray">ACTIVE AUDIT TRAIL</span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="cyber-table">
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>Account</th>
+                <th>Origin IP</th>
+                <th>Location</th>
+                <th>Device</th>
+                <th>Status</th>
+                <th>AI Risk Score</th>
+                <th>Explainable AI</th>
+              </tr>
+            </thead>
+            <tbody id="attemptsTableBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Explainable AI Modal -->
+  <div id="explainModal" class="modal-backdrop">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 style="font-size:1.15rem; color:#fff; display:flex; align-items:center; gap:0.5rem;">
+          <svg width="20" height="20" fill="none" stroke="var(--accent-cyan)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <span>Explainable AI Risk Breakdown</span>
+        </h3>
+        <button class="modal-close" onclick="closeExplainModal()">&times;</button>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.8rem; margin-bottom:1rem; font-size:0.85rem;">
+        <div style="background:rgba(255,255,255,0.03); padding:0.6rem; border-radius:var(--radius-sm);">
+          <span style="color:var(--text-muted); font-size:0.72rem; display:block;">Target Account:</span>
+          <strong id="modalUser" style="color:#fff;">--</strong>
+          <span id="modalTimestamp" style="font-size:0.75rem; color:var(--text-secondary); display:block; margin-top:0.2rem;">--</span>
+        </div>
+        <div style="background:rgba(255,255,255,0.03); padding:0.6rem; border-radius:var(--radius-sm);">
+          <span style="color:var(--text-muted); font-size:0.72rem; display:block;">Risk Rating:</span>
+          <span id="modalRiskLevel" class="badge">Safe</span>
+          <span id="modalScore" style="font-family:var(--font-mono); margin-left:0.4rem; color:#fff;">--</span>
+        </div>
+        <div style="background:rgba(255,255,255,0.03); padding:0.6rem; border-radius:var(--radius-sm);">
+          <span style="color:var(--text-muted); font-size:0.72rem; display:block;">Origin IP &amp; Geolocation:</span>
+          <span id="modalIp" style="font-family:var(--font-mono); color:var(--accent-cyan);">--</span> &bull; <span id="modalLocation">--</span>
+        </div>
+        <div style="background:rgba(255,255,255,0.03); padding:0.6rem; border-radius:var(--radius-sm);">
+          <span style="color:var(--text-muted); font-size:0.72rem; display:block;">Device Fingerprint:</span>
+          <span id="modalDevice" style="color:var(--text-secondary);">--</span>
+        </div>
+      </div>
+
+      <div style="margin-top:1.2rem;">
+        <div style="font-size:0.85rem; font-weight:600; color:var(--text-secondary); margin-bottom:0.5rem;">Triggered Anomaly Factors &amp; Model Decisions:</div>
+        <ul id="modalReasonsList" style="padding-left:1.2rem; font-size:0.85rem; color:#fff; line-height:1.5;"></ul>
+      </div>
+
+      <div style="margin-top:1.5rem; text-align:right;">
+        <button type="button" class="btn btn-outline btn-sm" onclick="closeExplainModal()">Close Inspector</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>SecureAI Cyber Intelligence Platform &copy; 2026 &bull; Powered by Random Forest Machine Learning &amp; Real-time Behavioral Telemetry.</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="static/js/main.js"></script>
+  <script>
+    let barChartInstance = null;
+    let doughnutChartInstance = null;
+
+    function renderDashboard() {
+      const stats = CyberDataStore.getStats();
+
+      // Update KPIs
+      document.getElementById('kpiTotal').textContent = stats.total_attempts;
+      document.getElementById('kpiSafe').textContent = stats.safe_count;
+      document.getElementById('kpiSuspicious').textContent = stats.suspicious_count;
+      document.getElementById('kpiHighRisk').textContent = stats.high_risk_count;
+
+      // Update Incident Stream Table
+      const incTbody = document.getElementById('incidentsTableBody');
+      if (stats.recent_events.length === 0) {
+        incTbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No security incidents recorded.</td></tr>`;
+      } else {
+        incTbody.innerHTML = stats.recent_events.map(ev => {
+          let badgeClass = "badge-safe";
+          if (ev.severity === "Critical" || ev.severity === "High") badgeClass = "badge-high-risk";
+          else if (ev.severity === "Medium") badgeClass = "badge-suspicious";
+
+          return `
+            <tr>
+              <td style="font-family:var(--font-mono); font-size:0.8rem; color:var(--text-secondary);">${ev.created_at}</td>
+              <td><span class="badge ${badgeClass}">${ev.severity.toUpperCase()}</span></td>
+              <td style="font-family:var(--font-mono); font-size:0.82rem; font-weight:600; color:#fff;">${ev.event_type}</td>
+              <td style="font-size:0.85rem; color:var(--accent-cyan);">${ev.user_email || 'System Wide'}</td>
+              <td style="font-size:0.85rem; color:var(--text-primary);">${ev.description}</td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      // Update Telemetry Audit Table
+      const attTbody = document.getElementById('attemptsTableBody');
+      if (stats.recent_attempts.length === 0) {
+        attTbody.innerHTML = `<tr><td colspan="8" style="text-align:center; color:var(--text-muted);">No login records present.</td></tr>`;
+      } else {
+        attTbody.innerHTML = stats.recent_attempts.map(att => {
+          let scoreBadge = "badge-safe";
+          if (att.risk_level === "High Risk") scoreBadge = "badge-high-risk";
+          else if (att.risk_level === "Suspicious") scoreBadge = "badge-suspicious";
+
+          const attJson = JSON.stringify(att).replace(/"/g, '&quot;');
+
+          return `
+            <tr>
+              <td style="font-family:var(--font-mono); font-size:0.78rem; color:var(--text-secondary);">${att.timestamp}</td>
+              <td style="font-size:0.85rem; color:#fff; font-weight:500;">${att.user_email || 'Unknown'}</td>
+              <td style="font-family:var(--font-mono); font-size:0.8rem; color:var(--accent-cyan);">${att.ip_address}</td>
+              <td style="font-size:0.85rem;">${att.location}</td>
+              <td style="font-size:0.82rem; color:var(--text-secondary);">${att.device}</td>
+              <td><span class="badge ${att.success === 1 ? 'badge-safe' : 'badge-high-risk'}">${att.success === 1 ? 'GRANTED' : 'DENIED'}</span></td>
+              <td><span class="badge ${scoreBadge}">${att.risk_score}/100</span></td>
+              <td>
+                <button type="button" class="btn btn-outline btn-sm" style="font-size:0.72rem; padding:0.25rem 0.6rem;" onclick='openExplainModal(${attJson})'>
+                  Inspect AI
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      // Charts
+      renderCharts(stats.safe_count, stats.suspicious_count, stats.high_risk_count, stats.failed_count);
+    }
+
+    function renderCharts(safe, suspicious, highRisk, failed) {
+      if (barChartInstance) barChartInstance.destroy();
+      if (doughnutChartInstance) doughnutChartInstance.destroy();
+
+      const ctxBar = document.getElementById('riskDistributionChart').getContext('2d');
+      barChartInstance = new Chart(ctxBar, {
+        type: 'bar',
+        data: {
+          labels: ['Safe Baseline', 'Suspicious Anomalies', 'High Risk Attacks', 'Failed Interceptions'],
+          datasets: [{
+            label: 'Interceptions',
+            data: [safe, suspicious, highRisk, failed],
+            backgroundColor: [
+              'rgba(0, 255, 157, 0.4)',
+              'rgba(255, 184, 0, 0.4)',
+              'rgba(255, 51, 102, 0.4)',
+              'rgba(157, 78, 221, 0.4)'
+            ],
+            borderColor: ['#00ff9d', '#ffb800', '#ff3366', '#9d4edd'],
+            borderWidth: 1.5,
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: {
+              grid: { color: 'rgba(255, 255, 255, 0.05)' },
+              ticks: { color: '#8da2c0', font: { family: 'Inter' } }
+            },
+            y: {
+              grid: { color: 'rgba(255, 255, 255, 0.05)' },
+              ticks: { color: '#8da2c0', stepSize: 1, font: { family: 'JetBrains Mono' } }
+            }
+          }
+        }
+      });
+
+      const ctxPie = document.getElementById('postureChart').getContext('2d');
+      doughnutChartInstance = new Chart(ctxPie, {
+        type: 'doughnut',
+        data: {
+          labels: ['Safe', 'Suspicious', 'High Risk'],
+          datasets: [{
+            data: [safe, suspicious, highRisk],
+            backgroundColor: ['#00ff9d', '#ffb800', '#ff3366'],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: { color: '#8da2c0', font: { size: 11 } }
+            }
+          },
+          cutout: '70%'
+        }
+      });
+    }
+
+    function switchPersona(name, email, role) {
+      CyberDataStore.setCurrentUser({ name, email, role, loggedIn: true });
+      document.querySelectorAll('.header-user-name').forEach(el => el.textContent = name);
+      document.querySelectorAll('.header-user-role').forEach(el => el.textContent = role);
+    }
+
+    function resetSocData() {
+      CyberDataStore.resetData();
+      renderDashboard();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderDashboard();
+    });
+  </script>
+</body>
+</html>

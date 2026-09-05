@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SecureAI - Interactive Cyber Attack Simulation Lab</title>
+  
+  <!-- Modern Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Custom Cyber SOC Stylesheet -->
+  <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-brand">
+      <div class="brand-icon">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+        </svg>
+      </div>
+      <span>Secure<span style="color:var(--accent-cyan);">AI</span></span>
+    </a>
+
+    <!-- Desktop Nav Links -->
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="simulator.html" class="active">Attack Simulator</a></li>
+      <li><a href="dashboard.html">SOC Dashboard</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <div class="status-badge" title="AI Risk Engine Operational">
+        <div class="status-dot"></div>
+        <span class="status-text">ML ACTIVE</span>
+      </div>
+
+      <div class="desktop-auth-actions">
+        <div style="display:flex; align-items:center; gap:0.6rem;">
+          <span style="font-size:0.85rem; color:var(--text-secondary);">
+            <span class="header-user-name">Security Officer</span>
+            <span class="badge badge-gray header-user-role" style="margin-left:0.2rem;">Admin</span>
+          </span>
+          <a href="login.html" class="btn btn-outline btn-sm">Switch Account</a>
+        </div>
+      </div>
+
+      <!-- Mobile Hamburger Toggle -->
+      <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Drawer Menu -->
+  <div class="mobile-menu-drawer" id="mobileMenuDrawer">
+    <ul class="mobile-nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="simulator.html">Attack Simulator</a></li>
+      <li><a href="dashboard.html">SOC Dashboard</a></li>
+    </ul>
+    <div class="mobile-menu-actions">
+      <div style="margin-bottom:0.8rem; color:var(--text-secondary); font-size:0.9rem;">
+        Signed in as <strong class="header-user-name">Security Officer</strong>
+      </div>
+      <a href="login.html" class="btn btn-outline btn-block" style="margin-bottom:0.6rem;">Sign In / Switch</a>
+      <a href="register.html" class="btn btn-primary btn-block">Enroll New ID</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div style="max-width: 1000px; margin: 0 auto;">
+
+      <!-- Header -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.8rem; flex-wrap:wrap; gap:1rem;">
+        <div>
+          <h1 style="font-size: 1.85rem; font-weight:800; color:#fff; display:flex; align-items:center; gap:0.6rem;">
+            <span>Cyber Threat &amp; Attack Simulation Lab</span>
+            <span class="badge badge-high-risk">RED TEAM SANDBOX</span>
+          </h1>
+          <p style="font-size:0.9rem; color:var(--text-secondary); margin-top:0.2rem;">
+            Trigger live adversarial attack vectors against the AI Risk Engine to verify real-time intrusion mitigation and behavioral classification.
+          </p>
+        </div>
+
+        <a href="dashboard.html" class="btn btn-outline btn-sm">
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+          Inspect in SOC Dashboard
+        </a>
+      </div>
+
+      <!-- Attack Controls Grid -->
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem; margin-bottom:2rem;">
+
+        <!-- Scenario Selector Card -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <svg width="20" height="20" fill="none" stroke="var(--accent-crimson)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+              <span>Select Attack Vector</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="simTargetEmail">Target Victim Identity</label>
+            <input type="email" id="simTargetEmail" class="form-control" value="admin@secureai.com" placeholder="admin@secureai.com">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Simulation Scenarios:</label>
+            
+            <div style="display:flex; flex-direction:column; gap:0.75rem;">
+              <label style="display:flex; align-items:flex-start; gap:0.8rem; background:rgba(255,255,255,0.02); padding:0.8rem; border-radius:var(--radius-sm); border:1px solid rgba(255,255,255,0.06); cursor:pointer;">
+                <input type="radio" name="simScenario" value="brute_force" checked style="margin-top:0.25rem;">
+                <div>
+                  <strong style="color:#fff; font-size:0.88rem; display:block;">Brute Force &amp; Credential Stuffing</strong>
+                  <span style="font-size:0.78rem; color:var(--text-secondary); line-height:1.4; display:block;">
+                    Fires 5 rapid credential stuffing attempts with weak dictionary passwords from a Tor Exit Node IP (Frankfurt, Germany).
+                  </span>
+                </div>
+              </label>
+
+              <label style="display:flex; align-items:flex-start; gap:0.8rem; background:rgba(255,255,255,0.02); padding:0.8rem; border-radius:var(--radius-sm); border:1px solid rgba(255,255,255,0.06); cursor:pointer;">
+                <input type="radio" name="simScenario" value="impossible_travel" style="margin-top:0.25rem;">
+                <div>
+                  <strong style="color:#fff; font-size:0.88rem; display:block;">Impossible Travel Anomaly</strong>
+                  <span style="font-size:0.78rem; color:var(--text-secondary); line-height:1.4; display:block;">
+                    Initiates a sudden login from Tokyo, Japan immediately after verified US baseline activity.
+                  </span>
+                </div>
+              </label>
+
+              <label style="display:flex; align-items:flex-start; gap:0.8rem; background:rgba(255,255,255,0.02); padding:0.8rem; border-radius:var(--radius-sm); border:1px solid rgba(255,255,255,0.06); cursor:pointer;">
+                <input type="radio" name="simScenario" value="weak_password" style="margin-top:0.25rem;">
+                <div>
+                  <strong style="color:#fff; font-size:0.88rem; display:block;">Compromised / Weak Password Exploit</strong>
+                  <span style="font-size:0.78rem; color:var(--text-secondary); line-height:1.4; display:block;">
+                    Evaluates a predictable password pattern ('qwerty123') through the Random Forest classifier.
+                  </span>
+                </div>
+              </label>
+
+              <label style="display:flex; align-items:flex-start; gap:0.8rem; background:rgba(255,255,255,0.02); padding:0.8rem; border-radius:var(--radius-sm); border:1px solid rgba(255,255,255,0.06); cursor:pointer;">
+                <input type="radio" name="simScenario" value="normal_login" style="margin-top:0.25rem;">
+                <div>
+                  <strong style="color:#fff; font-size:0.88rem; display:block;">Normal Authorized User Login</strong>
+                  <span style="font-size:0.78rem; color:var(--text-secondary); line-height:1.4; display:block;">
+                    Verifies baseline telemetry: known device fingerprint, legitimate US IP, high entropy credentials.
+                  </span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <button type="button" id="btnRunSim" class="btn btn-danger btn-block" style="padding:0.8rem;" onclick="triggerSelectedSimulation()">
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Execute Selected Threat Vector
+          </button>
+        </div>
+
+        <!-- Live Execution Terminal -->
+        <div class="card" style="display:flex; flex-direction:column;">
+          <div class="card-header">
+            <div class="card-title">
+              <svg width="20" height="20" fill="none" stroke="var(--accent-cyan)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              <span>AI Defense Interceptor Terminal</span>
+            </div>
+            <span id="simStatusBadge" class="badge badge-safe">READY FOR INGESTION</span>
+          </div>
+
+          <div style="flex:1; background:#04060b; border:1px solid #1a2538; border-radius:var(--radius-sm); padding:1rem; font-family:var(--font-mono); font-size:0.82rem; color:#00f0ff; overflow-y:auto; min-height:380px; max-height:450px; white-space:pre-wrap;" id="simTerminal">
+[SYSTEM INITIALIZED] SecureAI Behavioral Cyber Engine v1.0
+Listening for incoming telemetry packets...
+Ready to execute threat simulation. Select a vector and click 'Execute'.
+          </div>
+
+          <div style="margin-top:0.8rem; display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:0.75rem; color:var(--text-muted);">Events are automatically synchronized to the SOC audit log.</span>
+            <button type="button" class="btn btn-outline btn-sm" onclick="clearSimTerminal()">Clear Terminal</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>SecureAI Cyber Intelligence Platform &copy; 2026 &bull; Powered by Random Forest Machine Learning &amp; Real-time Behavioral Telemetry.</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="static/js/main.js"></script>
+  <script>
+    function triggerSelectedSimulation() {
+      const scenarioRadios = document.getElementsByName('simScenario');
+      let selected = 'brute_force';
+      for (const r of scenarioRadios) {
+        if (r.checked) {
+          selected = r.value;
+          break;
+        }
+      }
+      const targetEmail = document.getElementById('simTargetEmail').value;
+      runAttackSimulation(selected, targetEmail);
+    }
+
+    function clearSimTerminal() {
+      const term = document.getElementById('simTerminal');
+      if (term) {
+        term.innerHTML = '[TERMINAL RESET] Ready for simulation.\n';
+        document.getElementById('simStatusBadge').textContent = 'READY FOR INGESTION';
+        document.getElementById('simStatusBadge').className = 'badge badge-safe';
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SecureAI - Monitored Authentication Portal</title>
+  
+  <!-- Modern Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Custom Cyber SOC Stylesheet -->
+  <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-brand">
+      <div class="brand-icon">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+        </svg>
+      </div>
+      <span>Secure<span style="color:var(--accent-cyan);">AI</span></span>
+    </a>
+
+    <!-- Desktop Nav Links -->
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="simulator.html">Attack Simulator</a></li>
+      <li><a href="dashboard.html">SOC Dashboard</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <div class="status-badge" title="AI Risk Engine Operational">
+        <div class="status-dot"></div>
+        <span class="status-text">ML ACTIVE</span>
+      </div>
+
+      <div class="desktop-auth-actions">
+        <a href="login.html" class="btn btn-outline btn-sm active">Sign In</a>
+        <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
+      </div>
+
+      <!-- Mobile Hamburger Toggle -->
+      <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Drawer Menu -->
+  <div class="mobile-menu-drawer" id="mobileMenuDrawer">
+    <ul class="mobile-nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="simulator.html">Attack Simulator</a></li>
+      <li><a href="dashboard.html">SOC Dashboard</a></li>
+    </ul>
+    <div class="mobile-menu-actions">
+      <a href="login.html" class="btn btn-outline btn-block" style="margin-bottom:0.6rem;">Sign In</a>
+      <a href="register.html" class="btn btn-primary btn-block">Get Started</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div style="max-width: 520px; margin: 1rem auto;">
+
+      <div class="card" style="border:1px solid var(--border-glow);">
+        <div class="card-header">
+          <div class="card-title">
+            <svg width="22" height="22" fill="none" stroke="var(--accent-cyan)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            <span>Authentication Portal</span>
+          </div>
+          <span class="badge badge-safe">AI PROTECTED</span>
+        </div>
+
+        <!-- Quick Demo Profile Selector -->
+        <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:var(--radius-sm); padding:0.8rem; margin-bottom:1.5rem;">
+          <div style="font-size:0.75rem; color:var(--text-muted); font-family:var(--font-mono); margin-bottom:0.5rem; text-transform:uppercase;">
+            Quick Fill Demo Credentials:
+          </div>
+          <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+            <button type="button" class="btn btn-outline btn-sm" onclick="fillLogin('user@example.com', 'Summer2024!Pass')">Demo User</button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="fillLogin('admin@secureai.com', 'CyberSec#2024!A')">Security Admin</button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="fillLogin('analyst@secureai.com', 'VortexShield#99')">SOC Analyst</button>
+          </div>
+        </div>
+
+        <form id="loginForm" onsubmit="handleLoginSubmit(event)">
+          <div class="form-group">
+            <label class="form-label" for="loginEmail">Email Address</label>
+            <input type="email" id="loginEmail" name="email" class="form-control" placeholder="name@domain.com" value="admin@secureai.com" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="loginPassword">Password</label>
+            <input type="password" id="loginPassword" name="password" class="form-control" placeholder="Enter account password" value="CyberSec#2024!A" required>
+          </div>
+
+          <!-- Real-time Password Risk Indicator (Embedded on Login) -->
+          <div id="loginPwResults" style="display:none; margin-bottom:1.2rem; background:rgba(0,0,0,0.3); padding:0.8rem; border-radius:var(--radius-sm); border:1px solid var(--border-color);">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:0.78rem; color:var(--text-secondary);">Credential Strength:</span>
+              <span class="badge pw-risk-badge" style="font-size:0.7rem;">Checking...</span>
+            </div>
+            <div class="pw-meter-bar" style="margin:0.4rem 0 0.2rem;">
+              <div class="pw-meter-fill"></div>
+            </div>
+            <div style="font-size:0.72rem; color:var(--text-muted); display:flex; justify-content:space-between;">
+              <span>Entropy: <strong class="pw-entropy-val" style="color:#fff;">0</strong></span>
+              <span>Crack Time: <strong class="pw-crack-time" style="color:var(--accent-cyan);">--</strong></span>
+            </div>
+          </div>
+
+          <!-- Telemetry Simulator Toggle -->
+          <div style="margin-bottom:1.5rem; border-top:1px solid rgba(255,255,255,0.06); padding-top:1rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.6rem;">
+              <span style="font-size:0.8rem; font-weight:600; color:var(--text-secondary);">Simulate Client Telemetry (Testing):</span>
+              <button type="button" onclick="toggleTelemetry()" style="background:none; border:none; color:var(--accent-cyan); font-size:0.78rem; cursor:pointer;">Toggle Parameters</button>
+            </div>
+
+            <div id="telemetryPanel" style="background:rgba(10,15,26,0.8); padding:0.9rem; border-radius:var(--radius-sm); border:1px solid var(--border-color); font-size:0.82rem;">
+              <div style="margin-bottom:0.6rem;">
+                <label style="color:var(--text-muted); font-size:0.75rem;">Device Fingerprint:</label>
+                <input type="text" id="loginDevice" name="device" class="form-control" value="Chrome on Windows" style="padding:0.4rem 0.6rem; font-size:0.82rem;">
+              </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; margin-bottom:0.6rem;">
+                <div>
+                  <label style="color:var(--text-muted); font-size:0.75rem;">IP Address:</label>
+                  <input type="text" id="loginIp" name="ip_address" class="form-control" value="192.168.1.45" style="padding:0.4rem 0.6rem; font-size:0.82rem; font-family:var(--font-mono);">
+                </div>
+                <div>
+                  <label style="color:var(--text-muted); font-size:0.75rem;">Geolocation:</label>
+                  <input type="text" id="loginLocation" name="location" class="form-control" value="New York, USA" style="padding:0.4rem 0.6rem; font-size:0.82rem;">
+                </div>
+              </div>
+
+              <div style="display:flex; gap:0.4rem; flex-wrap:wrap; margin-top:0.4rem;">
+                <button type="button" class="btn btn-outline btn-sm" style="font-size:0.72rem; padding:0.2rem 0.5rem;" onclick="setLoginTelemetry('Chrome on Windows', '192.168.1.45', 'New York, USA')">Normal PC</button>
+                <button type="button" class="btn btn-outline btn-sm" style="font-size:0.72rem; padding:0.2rem 0.5rem;" onclick="setLoginTelemetry('Firefox on Linux', '82.165.197.1', 'London, UK')">New Device</button>
+                <button type="button" class="btn btn-outline btn-sm" style="font-size:0.72rem; padding:0.2rem 0.5rem;" onclick="setLoginTelemetry('Chrome on Android', '103.251.167.22', 'Tokyo, Japan')">Impossible Travel</button>
+                <button type="button" class="btn btn-outline btn-sm" style="font-size:0.72rem; padding:0.2rem 0.5rem;" onclick="setLoginTelemetry('Python-Requests/2.31', '185.220.101.5', 'Frankfurt, Germany (Tor Node)')">Tor Proxy</button>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" id="btnLoginSubmit" class="btn btn-primary btn-block" style="padding:0.8rem; margin-bottom:0.8rem;">
+            Authenticate with Password &amp; AI Risk Eval
+          </button>
+
+          <!-- Biometric Section -->
+          <div style="display:flex; align-items:center; gap:0.6rem; margin:1rem 0; color:var(--text-muted); font-size:0.75rem; text-transform:uppercase; letter-spacing:1px;">
+            <div style="flex:1; height:1px; background:rgba(255,255,255,0.08);"></div>
+            <span>or biometric fast-pass</span>
+            <div style="flex:1; height:1px; background:rgba(255,255,255,0.08);"></div>
+          </div>
+
+          <button type="button" class="btn btn-biometric btn-block" onclick="startBiometricAuth()" style="padding:0.8rem;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 12C2 6.5 6.5 2 12 2a10 10 0 0 1 8 4"/>
+              <path d="M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2"/>
+              <path d="M8.65 22A12.7 12.7 0 0 1 8 19.5c0-4 1.5-6.5 4-8.5"/>
+              <path d="M12 22a10 10 0 0 0 6.5-2.5"/>
+              <path d="M16 16c.5-1 1-2.5 1-4a7 7 0 0 0-3.5-6"/>
+              <path d="M12 7a5 5 0 0 0-4.5 7"/>
+              <path d="M12 11a1 1 0 0 1 1 1c0 2-1.5 3.5-3 5"/>
+            </svg>
+            <span>Sign In with Fingerprint / Biometrics</span>
+          </button>
+
+          <div style="text-align:center; margin-top:1.2rem; font-size:0.85rem; color:var(--text-muted);">
+            Don't have an account? <a href="register.html">Create one now</a>
+          </div>
+        </form>
+      </div>
+
+    </div>
+
+    <!-- Holographic Biometric Scanner Modal -->
+    <div class="modal-backdrop" id="biometricModal">
+      <div class="modal-content" style="max-width: 440px; text-align: center;">
+        <div class="modal-header">
+          <div class="card-title">
+            <svg width="22" height="22" fill="none" stroke="var(--accent-emerald)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            <span>AI Biometric Sensor</span>
+          </div>
+          <button class="modal-close" onclick="closeBiometricModal()">&times;</button>
+        </div>
+
+        <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:1.5rem;">
+          Place your finger on the device sensor or tap the scanner below to verify your biometric cryptographic signature.
+        </p>
+
+        <!-- Fingerprint Scanner Visual -->
+        <div class="bio-scanner-pad" id="bioScannerPad" onclick="performBiometricScan()">
+          <div class="bio-scan-line"></div>
+          <svg class="bio-fingerprint-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 12C2 6.5 6.5 2 12 2a10 10 0 0 1 8 4"/>
+            <path d="M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2"/>
+            <path d="M8.65 22A12.7 12.7 0 0 1 8 19.5c0-4 1.5-6.5 4-8.5"/>
+            <path d="M12 22a10 10 0 0 0 6.5-2.5"/>
+            <path d="M16 16c.5-1 1-2.5 1-4a7 7 0 0 0-3.5-6"/>
+            <path d="M12 7a5 5 0 0 0-4.5 7"/>
+            <path d="M12 11a1 1 0 0 1 1 1c0 2-1.5 3.5-3 5"/>
+          </svg>
+          <div class="bio-pulse-ring"></div>
+        </div>
+
+        <div class="bio-status-msg" id="bioStatusMsg">
+          Tap fingerprint sensor or press your device biometric key
+        </div>
+
+        <div style="margin-top:1.2rem; display:flex; justify-content:center; gap:0.5rem;">
+          <button type="button" class="btn btn-outline btn-sm" onclick="closeBiometricModal()">Use Password Instead</button>
+          <button type="button" class="btn btn-primary btn-sm" onclick="performBiometricScan()">Scan Fingerprint Now</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>SecureAI Cyber Intelligence Platform &copy; 2026 &bull; Powered by Random Forest Machine Learning &amp; Real-time Behavioral Telemetry.</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="static/js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      initPasswordAnalyzer('#loginPassword', '#loginPwResults');
+      const pwdInput = document.getElementById('loginPassword');
+      if (pwdInput && pwdInput.value) {
+        pwdInput.dispatchEvent(new Event('input'));
+      }
+    });
+
+    function fillLogin(email, password) {
+      document.getElementById('loginEmail').value = email;
+      const pwdInput = document.getElementById('loginPassword');
+      pwdInput.value = password;
+      pwdInput.dispatchEvent(new Event('input'));
+    }
+
+    function toggleTelemetry() {
+      const panel = document.getElementById('telemetryPanel');
+      panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function handleLoginSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const pwd = document.getElementById('loginPassword').value;
+      const device = document.getElementById('loginDevice').value;
+      const ip = document.getElementById('loginIp').value;
+      const location = document.getElementById('loginLocation').value;
+
+      const analysis = analyzePasswordSecurity(pwd);
+      const isTor = ip.includes('185.220') || location.includes('Tor');
+      const isImpossible = location.includes('Tokyo');
+
+      let riskScore = 10;
+      let riskLevel = "Safe";
+      let reasons = ["Trusted baseline environment", "Verified credentials"];
+
+      if (isTor) {
+        riskScore = 95;
+        riskLevel = "High Risk";
+        reasons = ["Tor Exit Node IP detected", "Rapid velocity spike flagged"];
+      } else if (isImpossible) {
+        riskScore = 88;
+        riskLevel = "High Risk";
+        reasons = ["Impossible travel velocity jump", "Unrecognized device signature"];
+      } else if (analysis.predicted_category === 2) {
+        riskScore = 65;
+        riskLevel = "Suspicious";
+        reasons = ["Weak / dictionary password candidate", "Low information entropy"];
+      }
+
+      CyberDataStore.addAttempt({
+        user_email: email,
+        ip_address: ip,
+        location: location,
+        device: device,
+        success: riskScore < 80 ? 1 : 0,
+        risk_score: riskScore,
+        risk_level: riskLevel,
+        reasons: reasons.join(', ')
+      });
+
+      CyberDataStore.setCurrentUser({
+        name: email.split('@')[0].toUpperCase(),
+        email: email,
+        role: email.includes('admin') ? 'Admin' : (email.includes('analyst') ? 'Analyst' : 'User'),
+        loggedIn: true
+      });
+
+      const btn = document.getElementById('btnLoginSubmit');
+      btn.textContent = 'Telemetry Verified! Redirecting...';
+      btn.style.background = 'linear-gradient(135deg, var(--accent-emerald), #00bb77)';
+
+      setTimeout(() => {
+        window.location.href = 'dashboard.html';
+      }, 700);
+    }
+  </script>
+</body>
+</html>

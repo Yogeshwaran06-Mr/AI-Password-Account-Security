@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SecureAI - Account Registration with AI Password Verification</title>
+  
+  <!-- Modern Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Custom Cyber SOC Stylesheet -->
+  <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-brand">
+      <div class="brand-icon">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+        </svg>
+      </div>
+      <span>Secure<span style="color:var(--accent-cyan);">AI</span></span>
+    </a>
+
+    <!-- Desktop Nav Links -->
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="simulator.html">Attack Simulator</a></li>
+      <li><a href="dashboard.html">SOC Dashboard</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <div class="status-badge" title="AI Risk Engine Operational">
+        <div class="status-dot"></div>
+        <span class="status-text">ML ACTIVE</span>
+      </div>
+
+      <div class="desktop-auth-actions">
+        <a href="login.html" class="btn btn-outline btn-sm">Sign In</a>
+        <a href="register.html" class="btn btn-primary btn-sm active">Get Started</a>
+      </div>
+
+      <!-- Mobile Hamburger Toggle -->
+      <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Drawer Menu -->
+  <div class="mobile-menu-drawer" id="mobileMenuDrawer">
+    <ul class="mobile-nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="simulator.html">Attack Simulator</a></li>
+      <li><a href="dashboard.html">SOC Dashboard</a></li>
+    </ul>
+    <div class="mobile-menu-actions">
+      <a href="login.html" class="btn btn-outline btn-block" style="margin-bottom:0.6rem;">Sign In</a>
+      <a href="register.html" class="btn btn-primary btn-block">Get Started</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div style="max-width: 540px; margin: 1rem auto;">
+
+      <div class="card" style="border:1px solid var(--border-glow);">
+        <div class="card-header">
+          <div class="card-title">
+            <svg width="22" height="22" fill="none" stroke="var(--accent-cyan)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
+            <span>Account Registration</span>
+          </div>
+          <span class="badge badge-safe">ML AUDITED</span>
+        </div>
+
+        <p style="font-size:0.88rem; color:var(--text-secondary); margin-bottom:1.5rem;">
+          Create a protected profile. Passwords are evaluated in real-time by a Random Forest classifier to prevent compromised or weak credentials.
+        </p>
+
+        <form id="regForm" onsubmit="handleRegisterSubmit(event)">
+          <div class="form-group">
+            <label class="form-label" for="regName">Full Name</label>
+            <input type="text" id="regName" name="name" class="form-control" placeholder="e.g. Sarah Connor" value="Sarah Connor" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="regEmail">Work or Personal Email</label>
+            <input type="email" id="regEmail" name="email" class="form-control" placeholder="name@company.com" value="s.connor@cyberdyne.io" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="regPassword">Password</label>
+            <input type="password" id="regPassword" name="password" class="form-control" placeholder="Create a strong, unique password" value="CyberSec#2026!A" required>
+          </div>
+
+          <!-- Real-Time Password Intelligence Panel -->
+          <div id="regPwResults" style="display:none; background:rgba(10, 15, 26, 0.8); padding:1rem; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom:1.5rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:0.8rem; font-weight:600; color:var(--text-secondary);">Random Forest ML Classification:</span>
+              <span class="badge pw-risk-badge">Evaluating...</span>
+            </div>
+
+            <div class="pw-meter-bar">
+              <div class="pw-meter-fill"></div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.6rem; margin-top:0.8rem;">
+              <div style="background:rgba(255,255,255,0.02); padding:0.6rem; border-radius:var(--radius-sm);">
+                <span style="font-size:0.72rem; color:var(--text-muted); display:block;">Shannon Entropy:</span>
+                <strong class="pw-entropy-val" style="font-size:0.95rem; color:#fff; font-family:var(--font-mono);">0.00 bits</strong>
+              </div>
+              <div style="background:rgba(255,255,255,0.02); padding:0.6rem; border-radius:var(--radius-sm);">
+                <span style="font-size:0.72rem; color:var(--text-muted); display:block;">Est. Crack Time:</span>
+                <strong class="pw-crack-time" style="font-size:0.95rem; color:var(--accent-cyan); font-family:var(--font-mono);">Instant</strong>
+              </div>
+            </div>
+
+            <div style="margin-top:0.8rem;">
+              <span style="font-size:0.75rem; color:var(--text-muted); display:block; margin-bottom:0.3rem;">Remediation Guidance:</span>
+              <ul class="pw-recommendations" style="padding-left:1.2rem; font-size:0.78rem; color:var(--text-secondary); line-height:1.4;"></ul>
+            </div>
+          </div>
+
+          <!-- Biometric Hardware Key Enrollment Option -->
+          <div style="background:rgba(0,255,157,0.06); border:1px solid rgba(0,255,157,0.25); border-radius:var(--radius-sm); padding:0.8rem; margin-bottom:1.2rem;">
+            <label style="display:flex; align-items:center; gap:0.6rem; font-size:0.82rem; color:var(--text-primary); cursor:pointer;">
+              <input type="checkbox" id="enableBioCheckbox" name="enable_biometrics" value="1" checked style="accent-color:var(--accent-emerald);">
+              <span>Enable Biometric / Fingerprint Fast-Pass for this profile (FIDO2 / WebAuthn)</span>
+            </label>
+          </div>
+
+          <button type="submit" id="btnRegSubmit" class="btn btn-primary btn-block" style="padding:0.8rem;">
+            Register &amp; Enforce AI Protection
+          </button>
+
+          <div style="text-align:center; margin-top:1.2rem; font-size:0.85rem; color:var(--text-muted);">
+            Already have an account? <a href="login.html">Sign in</a>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>SecureAI Cyber Intelligence Platform &copy; 2026 &bull; Powered by Random Forest Machine Learning &amp; Real-time Behavioral Telemetry.</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="static/js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      initPasswordAnalyzer('#regPassword', '#regPwResults');
+      const pwdInput = document.getElementById('regPassword');
+      if (pwdInput && pwdInput.value) {
+        pwdInput.dispatchEvent(new Event('input'));
+      }
+    });
+
+    function handleRegisterSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('regName').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const pwd = document.getElementById('regPassword').value;
+
+      const analysis = analyzePasswordSecurity(pwd);
+
+      CyberDataStore.setCurrentUser({
+        name: name,
+        email: email,
+        role: 'User',
+        loggedIn: true
+      });
+
+      CyberDataStore.addIncident({
+        severity: "Low",
+        event_type: "ACCOUNT_REGISTERED",
+        user_email: email,
+        description: `New identity enrolled by '${name}'. Password evaluated by ML (Entropy: ${analysis.entropy} bits/char).`
+      });
+
+      CyberDataStore.addAttempt({
+        user_email: email,
+        ip_address: "192.168.1.45",
+        location: "New York, USA",
+        device: "Chrome on Windows",
+        success: 1,
+        risk_score: 5,
+        risk_level: "Safe",
+        reasons: "Account created and initial baseline profile established"
+      });
+
+      const btn = document.getElementById('btnRegSubmit');
+      btn.textContent = 'Account Enrolled! Redirecting...';
+      btn.style.background = 'linear-gradient(135deg, var(--accent-emerald), #00bb77)';
+
+      setTimeout(() => {
+        window.location.href = 'dashboard.html';
+      }, 700);
+    }
+  </script>
+</body>
+</html>
