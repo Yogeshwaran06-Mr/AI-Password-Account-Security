@@ -182,14 +182,7 @@ fun authenticateWithBiometrics(activity: AppCompatActivity, challenge: String, e
 ```
 
 ---
-
-## 🌐 Local Development URLs
-
-- **Android Studio Emulator**: `http://10.0.2.2:5000`
-- **Physical Android Phone (Wi-Fi)**: `http://10.41.225.11:5000`
-- **Web Browser (PC)**: `http://127.0.0.1:5000`
-
----
+    
 
 ## 🧪 Testing Backend Biometric Endpoints
 
